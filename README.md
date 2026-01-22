@@ -17,5 +17,6 @@ This project is for **academic learning purposes only**.
 Eligibility rules are simplified and not official.
 
 ## How to Run
-gcc main.c eligibility_rules.c -o eligibility
+gcc main.c eligibility_rules.c -o eligibility  
 ./eligibility
+
