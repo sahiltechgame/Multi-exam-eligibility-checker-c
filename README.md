@@ -19,4 +19,12 @@ Eligibility rules are simplified and not official.
 ## How to Run
 gcc main.c eligibility_rules.c -o eligibility  
 ./eligibility
+## Sample Output
+
+Enter your name: Sahil
+Select Exam: GATE
+
+Result:
+Not eligible for GATE
+Reason: Graduation required
 
