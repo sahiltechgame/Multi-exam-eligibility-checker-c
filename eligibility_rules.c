@@ -1,172 +1,111 @@
 #include <stdio.h>
-#include <string.h>
-#include "eligibility_rules.h"
 
-/* -------- USER INPUT -------- */
-struct UserProfile getUserData() {
-    struct UserProfile user;
+/* -------- Class 10 -------- */
+void checkClass10() {
+    int age;
 
-    printf("\nEnter your name: ");
-    scanf(" %[^\n]", user.name);
-
+    printf("\n--- Class 10 Eligibility ---\n");
     printf("Enter age: ");
-    scanf("%d", &user.age);
+    scanf("%d", &age);
 
-    printf("Enter category (GEN/OBC/SC/ST): ");
-    scanf("%s", user.category);
+    if (age >= 14)
+        printf("✅ Eligible for Class 10\n");
+    else
+        printf("❌ Not eligible (Minimum age 14)\n");
+}
 
+/* -------- Class 12 -------- */
+void checkClass12() {
+    int passed10;
+
+    printf("\n--- Class 12 Eligibility ---\n");
     printf("Passed Class 10? (1=Yes, 0=No): ");
-    scanf("%d", &user.passedClass10);
+    scanf("%d", &passed10);
 
+    if (passed10)
+        printf("✅ Eligible for Class 12\n");
+    else
+        printf("❌ Not eligible (Class 10 required)\n");
+}
+
+/* -------- Graduation -------- */
+void checkGraduation() {
+    int passed12;
+
+    printf("\n--- Graduation Eligibility ---\n");
     printf("Passed Class 12? (1=Yes, 0=No): ");
-    scanf("%d", &user.passedClass12);
+    scanf("%d", &passed12);
 
-    if (user.passedClass12) {
-        printf("Subjects in Class 12 (PCM/PCB/PCMB/ARTS/COMMERCE): ");
-        scanf("%s", user.subjects12);
-
-        printf("Year of passing Class 12: ");
-        scanf("%d", &user.yearOfPassing12);
-    }
-
-    printf("Graduation completed? (1=Yes, 0=No): ");
-    scanf("%d", &user.graduationCompleted);
-
-    if (user.graduationCompleted) {
-        printf("Graduation stream (Engineering/Science/Arts/Medical): ");
-        scanf("%s", user.graduationStream);
-
-        printf("Graduation year: ");
-        scanf("%d", &user.graduationYear);
-    }
-
-    printf("UPSC attempts already used: ");
-    scanf("%d", &user.upscAttempts);
-
-    return user;
+    if (passed12)
+        printf("✅ Eligible for Graduation\n");
+    else
+        printf("❌ Not eligible (Class 12 required)\n");
 }
 
-/* -------- CLASS 10 -------- */
-void checkClass10(struct UserProfile user) {
-    if (user.age >= 14) {
-        printf("\n✅ Eligible for Class 10.\n");
-    } else {
-        printf("\n❌ Not eligible for Class 10.\nReason: Minimum age is 14.\n");
-    }
-}
+/* -------- JEE Main -------- */
+void checkJEE() {
+    int passed12, pcm;
 
-/* -------- CLASS 12 -------- */
-void checkClass12(struct UserProfile user) {
-    if (user.passedClass10) {
-        printf("\n✅ Eligible for Class 12.\n");
-    } else {
-        printf("\n❌ Not eligible for Class 12.\nReason: Class 10 not passed.\n");
-    }
-}
+    printf("\n--- JEE Main Eligibility ---\n");
+    printf("Passed Class 12? (1=Yes, 0=No): ");
+    scanf("%d", &passed12);
 
-/* -------- GRADUATION -------- */
-void checkGraduation(struct UserProfile user) {
-    if (user.passedClass12) {
-        printf("\n✅ Eligible for Graduation.\n");
-    } else {
-        printf("\n❌ Not eligible for Graduation.\nReason: Class 12 not passed.\n");
-    }
-}
+    printf("Studied PCM? (1=Yes, 0=No): ");
+    scanf("%d", &pcm);
 
-/* -------- JEE MAIN -------- */
-void checkJEE(struct UserProfile user) {
-    if (!user.passedClass12) {
-        printf("\n❌ Not eligible for JEE Main.\nReason: Class 12 not passed.\n");
-        return;
-    }
-
-    if (strcmp(user.subjects12, "PCM") != 0 &&
-        strcmp(user.subjects12, "PCMB") != 0) {
-        printf("\n❌ Not eligible for JEE Main.\nReason: PCM subjects required.\n");
-        return;
-    }
-
-    if (CURRENT_YEAR - user.yearOfPassing12 > 2) {
-        printf("\n❌ Not eligible for JEE Main.\nReason: Class 12 passed too early.\n");
-        return;
-    }
-
-    printf("\n✅ Eligible for JEE Main.\n");
+    if (passed12 && pcm)
+        printf("✅ Eligible for JEE Main\n");
+    else
+        printf("❌ Not eligible (Class 12 with PCM required)\n");
 }
 
 /* -------- UPSC -------- */
-void checkUPSC(struct UserProfile user) {
-    int maxAge = 32, maxAttempts = 6;
+void checkUPSC() {
+    int age, graduate;
 
-    if (strcmp(user.category, "OBC") == 0) {
-        maxAge = 35;
-        maxAttempts = 9;
-    } else if (strcmp(user.category, "SC") == 0 ||
-               strcmp(user.category, "ST") == 0) {
-        maxAge = 37;
-        maxAttempts = 999;
-    }
+    printf("\n--- UPSC Eligibility ---\n");
+    printf("Enter age: ");
+    scanf("%d", &age);
 
-    if (user.age < 21 || user.age > maxAge) {
-        printf("\n❌ Not eligible for UPSC.\nReason: Age not in allowed range.\n");
-        return;
-    }
+    printf("Graduation completed? (1=Yes, 0=No): ");
+    scanf("%d", &graduate);
 
-    if (!user.graduationCompleted) {
-        printf("\n❌ Not eligible for UPSC.\nReason: Graduation not completed.\n");
-        return;
-    }
-
-    if (user.upscAttempts >= maxAttempts) {
-        printf("\n❌ Not eligible for UPSC.\nReason: Attempt limit exceeded.\n");
-        return;
-    }
-
-    printf("\n✅ Eligible for UPSC.\n");
-    printf("Remaining attempts: %d\n", maxAttempts - user.upscAttempts);
+    if (age >= 21 && age <= 32 && graduate)
+        printf("✅ Eligible for UPSC\n");
+    else
+        printf("❌ Not eligible (Age 21–32 + Graduation required)\n");
 }
 
 /* -------- GATE -------- */
-void checkGATE(struct UserProfile user) {
-    if (!user.graduationCompleted) {
-        printf("\n❌ Not eligible for GATE.\nReason: Graduation required.\n");
-        return;
-    }
+void checkGATE() {
+    int graduate;
 
-    if (strcmp(user.graduationStream, "Engineering") != 0 &&
-        strcmp(user.graduationStream, "Science") != 0) {
-        printf("\n❌ Not eligible for GATE.\nReason: Engineering/Science degree required.\n");
-        return;
-    }
+    printf("\n--- GATE Eligibility ---\n");
+    printf("Graduation completed or final year? (1=Yes, 0=No): ");
+    scanf("%d", &graduate);
 
-    printf("\n✅ Eligible for GATE.\n");
+    if (graduate)
+        printf("✅ Eligible for GATE\n");
+    else
+        printf("❌ Not eligible (Graduation required)\n");
 }
 
 /* -------- NEET -------- */
-void checkNEET(struct UserProfile user) {
-    int maxAge = 25;
+void checkNEET() {
+    int age, passed12, pcb;
 
-    if (strcmp(user.category, "OBC") == 0 ||
-        strcmp(user.category, "SC") == 0 ||
-        strcmp(user.category, "ST") == 0) {
-        maxAge = 30;
-    }
+    printf("\n--- NEET Eligibility ---\n");
+    printf("Enter age: ");
+    scanf("%d", &age);
 
-    if (user.age < 17 || user.age > maxAge) {
-        printf("\n❌ Not eligible for NEET.\nReason: Age criteria not met.\n");
-        return;
-    }
+    printf("Passed Class 12? (1=Yes, 0=No): ");
+    scanf("%d", &passed12);
 
-    if (!user.passedClass12) {
-        printf("\n❌ Not eligible for NEET.\nReason: Class 12 not passed.\n");
-        return;
-    }
+    printf("Studied PCB? (1=Yes, 0=No): ");
+    scanf("%d", &pcb);
 
-    if (strcmp(user.subjects12, "PCB") != 0 &&
-        strcmp(user.subjects12, "PCMB") != 0) {
-        printf("\n❌ Not eligible for NEET.\nReason: PCB subjects required.\n");
-        return;
-    }
-
-    printf("\n✅ Eligible for NEET.\n");
+    if (age >= 17 && passed12 && pcb)
+        printf("✅ Eligible for NEET\n");
+    else
+        printf("❌ Not eligible (Age ≥17 + PCB required)\n");
 }
